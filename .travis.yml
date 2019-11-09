@@ -11,9 +11,9 @@ script:
 
 after_success:
   - docker build -t davideimola/fibonacci ./client
-  - docker build -t davideimola/nginx ./fibonacci-nginx
-  - docker build -t davideimola/server ./fibonacci-server
-  - docker build -t davideimola/worker ./fibonacci-worker
+  - docker build -t davideimola/fibonacci-nginx ./nginx
+  - docker build -t davideimola/fibonacci-server ./server
+  - docker build -t davideimola/fibonacci-worker ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
