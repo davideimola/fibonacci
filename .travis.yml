@@ -1,0 +1,23 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t davideimola/fibonacci-dev -f ./client/Dockerfile.dev .
+
+script:
+  - docker run -e CI=true davideimola/fibonacci-dev npm run test
+
+after_success:
+  - docker build -t davideimola/fibonacci ./client
+  - docker build -t davideimola/nginx ./fibonacci-nginx
+  - docker build -t davideimola/server ./fibonacci-server
+  - docker build -t davideimola/worker ./fibonacci-worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push davideimola/fibonacci
+  - docker push davideimola/fibonacci-nginx
+  - docker push davideimola/fibonacci-server
+  - docker push davideimola/fibonacci-worker
